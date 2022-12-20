@@ -76,6 +76,9 @@ input:checked + li {
   text-decoration: line-through;
   /* text-decoration-color: black; */
 }
+.checkbox {
+  width: 24px !important;
+}
 #inputtask:focus {
   outline: none;
 }
@@ -117,5 +120,20 @@ li span:focus {
   margin: 20px;
 }
 .link a {
+  color: white;
+}
+
+footer {
+  text-align: center;
+  padding-top: 20px;
+  color: white;
+}
+
+.routes {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.routes a {
   color: white;
 }

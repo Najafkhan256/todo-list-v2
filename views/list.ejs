@@ -1,34 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Todo List</title>
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
-  <body>
-    <div class="main">
-      <h1><%= kindOfDay %> LIST</h1>
-      <form action="/" class="form" method="post">
-        <input
-          id="inputtask"
-          type="text"
-          name="newList"
-          placeholder="Enter your task here"
-          autocomplete="off"
-        />
-        <input id="addbutton" value="Add Task" type="submit" />
-      </form>
-      <ol class="todolist">
-        <% for(var i = 0; i < newListItems.length; i++){ %>
-        <span>
-          <input type="checkbox" />
-          <li><%= newListItems[i] %></li>
-        </span>
+<%- include('header') -%>
+
+  <div class="main">
+    <% if(listTitle==="Saturday" || listTitle==="Sunday" ){ %>
+      <h1 style="color: red">
+        <%= listTitle %>
+      </h1>
+      <% }else{ %>
+        <h1 style="color: white">
+          <%= listTitle %>
+        </h1>
         <% } %>
-      </ol>
-      <button class="clear d-none">Clear All</button>
-    </div>
-  </body>
-</html>
+
+          <!-- <h1 style="color: green"><%= listTitle %> LIST</h1> -->
+          <form action="/" class="form" method="post">
+            <input id="inputtask" type="text" name="newList" placeholder="Enter your task here" autocomplete="off" />
+            <button id="addbutton" type="submit" name="list" value=<%=listTitle %>
+              > ADD LIST
+            </button>
+          </form>
+          <ol class="todolist">
+            <% for(var i=0; i < newListItems.length; i++){ %>
+              <span>
+                <input type="checkbox" class="checkbox" />
+                <li>
+                  <%= newListItems[i] %>
+                </li>
+              </span>
+              <% } %>
+          </ol>
+          <button type="reset" class="clear">Clear All</button>
+
+  </div>
+
+  <%- include('footer') -%>
