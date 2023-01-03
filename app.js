@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const date = require(__dirname + "/date.js");
+const _ = require("lodash");
 const { render } = require("ejs");
 
 mongoose.set("strictQuery", false);
@@ -63,7 +64,23 @@ app.get("/", function(req, res) {
 
 app.post("/", function(req, res) {
   const itemName = req.body.newList;
-  if (itemName.length > 0) {
+  const listName = req.body.list;
+
+  const item = new Items({
+    name: itemName
+  });
+
+  if (listName === "Today list") {
+    item.save();
+    res.redirect("/");
+  } else {
+    List.findOne({ name: listName }, function(err, foundList) {
+      foundList.items.push(item);
+      foundList.save();
+      res.redirect("/" + listName);
+    });
+  }
+  /* if (itemName.length > 0) {
     const item = new Items({
       name: itemName
     });
@@ -72,24 +89,38 @@ app.post("/", function(req, res) {
   } else {
     res.redirect("/");
     console.log("Ooops! item not found!");
-  }
+  } */
 });
 
 app.post("/delete", function(req, res) {
   const checkItemId = req.body.checkbox;
-  Items.findByIdAndRemove(checkItemId, function(err) {
-    if (!err) {
-      console.log("Item is deleted");
-      res.redirect("/");
-    } else {
-      console.log(err);
-    }
-  });
+  const listName = req.body.listName;
+
+  if (listName === "Today list") {
+    Items.findByIdAndRemove(checkItemId, function(err) {
+      if (!err) {
+        console.log("Item is deleted");
+        res.redirect("/");
+      } else {
+        console.log(err);
+      }
+    });
+  } else {
+    List.findOneAndUpdate(
+      { name: listName },
+      { $pull: { items: { _id: checkItemId } } },
+      function(err, foundList) {
+        if (!err) {
+          res.redirect("/" + listName);
+        }
+      }
+    );
+  }
 });
 
 // Dynamic routing
 app.get("/:customListName", function(req, res) {
-  const customListName = req.params.customListName;
+  const customListName = _.capitalize(req.params.customListName);
 
   // when we search any URL its add in customListName
 
