@@ -19,16 +19,17 @@
             </button>
           </form>
           <ol class="todolist">
-            <% for(var i=0; i < newListItems.length; i++){ %>
-              <span>
-                <input type="checkbox" class="checkbox" />
+            <% newListItems.forEach((list)=>{ %>
+              <form class="listForm" action="/delete" method="post">
+                <input type="checkbox" class="checkbox" name="checkbox" value="<%= list._id %>"
+                  onchange="this.form.submit()" />
                 <li>
-                  <%= newListItems[i] %>
+                  <%= list.name %>
                 </li>
-              </span>
-              <% } %>
+              </form>
+              <% }) %>
           </ol>
-          <button type="reset" class="clear">Clear All</button>
+          <!-- <button type="reset" class="clear">Clear All</button> -->
 
   </div>
 
