@@ -20,6 +20,7 @@ h1 {
   color: white;
   font-size: 60px;
   margin: 0 20px;
+  text-transform: capitalize;
 }
 
 .todolist {

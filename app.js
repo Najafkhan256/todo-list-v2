@@ -18,9 +18,9 @@ mongoose.connect(`mongodb://localhost:27017/${Database}`, {
   useUnifiedTopology: true
 });
 
-const itemsSchema = new mongoose.Schema({
+const itemsSchema = {
   name: String
-});
+};
 
 const Items = new mongoose.model("items", itemsSchema);
 
@@ -44,8 +44,7 @@ const listSchema = {
 const List = mongoose.model("List", listSchema);
 
 app.get("/", function(req, res) {
-  const day = date.getDay();
-
+  // const day = date.getDay();
   Items.find({}, function(err, foundItems) {
     if (foundItems.length === 0) {
       Items.insertMany(defaultItems, function(err) {
@@ -57,7 +56,7 @@ app.get("/", function(req, res) {
       });
       res.redirect("/");
     } else {
-      res.render("list", { listTitle: day, newListItems: foundItems });
+      res.render("list", { listTitle: "Today list", newListItems: foundItems });
     }
   });
 });
@@ -89,32 +88,33 @@ app.post("/delete", function(req, res) {
 });
 
 // Dynamic routing
-/* app.get("/:customListName", function(req, res) {
+app.get("/:customListName", function(req, res) {
   const customListName = req.params.customListName;
+
+  // when we search any URL its add in customListName
 
   List.findOne({ name: customListName }, function(err, foundList) {
     if (!err) {
       if (!foundList) {
-        // Creating new list
+        // creating new List
         const list = new List({
           name: customListName,
           items: defaultItems
         });
-
         list.save();
-        // res.redirect("/" + customListName);
+        res.redirect("/" + customListName);
       } else {
-        // show existing list
+        // printing existing list
         res.render("list", {
           listTitle: foundList.name,
-          newListItems: foundList.lists
+          newListItems: foundList.items
         });
       }
     }
   });
-}); */
+});
 
-app.get("/work", function(req, res) {
+/* app.get("/work", function(req, res) {
   res.render("list", { listTitle: "Work List", newListItems: workItems });
 });
 
@@ -130,7 +130,7 @@ app.post("/work", function(req, res) {
 
 app.get("/about", function(req, res) {
   res.render("about");
-});
+}); */
 app.listen(process.env.PORT || 3000, function() {
   console.log("Server is running on Port 3000");
 });
