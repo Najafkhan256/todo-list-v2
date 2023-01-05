@@ -14,10 +14,13 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-mongoose.connect(`mongodb://localhost:27017/${Database}`, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+mongoose.connect(
+  `mongodb+srv://najaf-khan:Najafkhanbaloch66252333@cluster0.eiq4hte.mongodb.net/${Database}`,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }
+);
 
 const itemsSchema = {
   name: String
@@ -57,7 +60,7 @@ app.get("/", function(req, res) {
       });
       res.redirect("/");
     } else {
-      res.render("list", { listTitle: "Today list", newListItems: foundItems });
+      res.render("list", { listTitle: "Today", newListItems: foundItems });
     }
   });
 });
@@ -70,7 +73,7 @@ app.post("/", function(req, res) {
     name: itemName
   });
 
-  if (listName === "Today list") {
+  if (listName === "Today") {
     item.save();
     res.redirect("/");
   } else {
@@ -96,7 +99,7 @@ app.post("/delete", function(req, res) {
   const checkItemId = req.body.checkbox;
   const listName = req.body.listName;
 
-  if (listName === "Today list") {
+  if (listName === "Today") {
     Items.findByIdAndRemove(checkItemId, function(err) {
       if (!err) {
         console.log("Item is deleted");
